@@ -17,8 +17,8 @@ class FacebookMessenger < Envoy
             require 'concurrent'
             @executor_service = Concurrent::ThreadPoolExecutor.new(
                 min_threads: 1,
-                max_threads: Concurrent.processor_count,
-                max_queue: 100,
+                max_threads: Concurrent.processor_count * 2,
+                max_queue: Concurrent.processor_count * 1000,
                 fallback_policy: :caller_runs
             )
             informs("Mode: Async...")

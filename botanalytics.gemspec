@@ -1,8 +1,8 @@
 
 Gem::Specification.new do |s|
     s.name = 'botanalytics'
-    s.version = '0.2.3'
-    s.date = '2018-04-17'
+    s.version = '0.2.4'
+    s.date = '2018-04-22'
     s.summary = 'Tracker for bots'
     s.description = 'Analytics & engagement gem for chatbots'
     s.authors = ['Beyhan Esen']
