@@ -90,7 +90,7 @@ class SlackRTMApi < Envoy
     # @param payload Hash
     def log_incoming(payload)
         if @active_team.nil? or @active_user.nil?
-            fails(Exception.new('team and bot'), 'Not initialized yet...')
+            fails(Exception.new('Team and Bot info is missing!'), 'Not initialized yet...')
         else
             validation = validate(payload)
             if validation[:ok]
@@ -115,7 +115,7 @@ class SlackRTMApi < Envoy
         #thread=None, reply_broadcast=None, msg_payload=None
 
         if @active_team.nil? or @active_user.nil?
-            fails(Exception.new('team and bot'), 'Not initialized yet...')
+            fails(Exception.new('Team and Bot info is missing!'), 'Not initialized yet...')
         else
             thread = params.fetch(:thread, nil)
             reply_broadcast = params.fetch(:reply_broadcast, nil)
@@ -183,8 +183,6 @@ class SlackEventApi < Envoy
         @path = 'messages/slack/event/'
         @initialize_path = 'bots/slack/initialize/'
         @interactive_path = 'messages/slack/interactive/'
-        @active_user = nil
-        @active_team = nil
         @async = params.fetch(:async, false)
         informs("Logging enabled for #{self.class.name}...")
         if @async
@@ -219,10 +217,6 @@ class SlackEventApi < Envoy
                 when Net::HTTPSuccess
                     start_data = JSON.parse(response.body)
                     if start_data['ok']
-
-                        @active_user = start_data['self']['id']
-                        @active_team = start_data['team']['id']
-
                         if submits(start_data, @initialize_path, "Successfully updated bot '#{start_data['self']['name']}' info...")
                             informs("Botanalytics::#{self.class.name} initialized team info successfully...")
                             sleep update_interval
@@ -261,35 +255,32 @@ class SlackEventApi < Envoy
 
     # @param payload Hash
     def log(payload)
+
         if payload.is_a?(Hash)
             return unless payload['challenge'].nil?
         end
 
-        if @active_team.nil? or @active_user.nil?
-            fails(Exception.new('team and bot'), 'Not initialized yet...')
-        else
-            validation = validate(payload)
-            if validation[:ok]
-                if @accepted_types.include?(payload['type'])
-                    informs('Logging message...')
-                    informs(payload)
-                    if @async
-                        @executor_service.post do
-                            submits(payload, payload['type'] == 'event_callback' ? @path : @interactive_path)
-                        end
-                    else
+        validation = validate(payload)
+        if validation[:ok]
+            if @accepted_types.include?(payload['type'])
+                informs('Logging message...')
+                informs(payload)
+                if @async
+                    @executor_service.post do
                         submits(payload, payload['type'] == 'event_callback' ? @path : @interactive_path)
                     end
                 else
-                    fails(
-                        Exception.new("Expected types, #{@accepted_types} but found #{payload['type']}"),
-                        'If you are sure this is a new event type, contact us < tech@botanalytics.co >',
-                        payload
-                    )
+                    submits(payload, payload['type'] == 'event_callback' ? @path : @interactive_path)
                 end
             else
-                fails(validation[:err], validation[:reason], payload)
+                fails(
+                    Exception.new("Expected types, #{@accepted_types} but found #{payload['type']}"),
+                    'If you are sure this is a new event type, contact us < tech@botanalytics.co >',
+                    payload
+                )
             end
+        else
+            fails(validation[:err], validation[:reason], payload)
         end
     end
 
