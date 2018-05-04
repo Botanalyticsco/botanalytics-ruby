@@ -3,11 +3,11 @@
 Ruby SDK currently supports
 
 
-* [Google Assistant](http://docs.botanalytics.apiary.io/)
-* [Amazon Alexa](http://docs.botanalytics.apiary.io/)
-* [Facebook](http://docs.botanalytics.apiary.io/)
-* [Slack](http://docs.botanalytics.apiary.io/)
-* [Generic](http://docs.botanalytics.apiary.io/)
+* [Google Assistant](https://botanalytics.co/docs#google-assistant)
+* [Amazon Alexa](https://botanalytics.co/docs#amazon-alexa)
+* [Facebook](https://botanalytics.co/docs#facebook-messenger)
+* [Slack](https://botanalytics.co/docs#slack)
+* [Generic](https://botanalytics.co/docs#generic)
 
 If you want to use nodejs instead, checkout [Botanalytics Node.js SDK](https://github.com/Botanalyticsco/botanalytics)
 
@@ -17,7 +17,7 @@ If you want to use python instead, checkout [Botanalytics Python SDK](https://gi
 
 ## Setup
 
-Create a free account at [https://www.botanalytics.co](https://www.botanalytics.co) and get a Token.
+Create a free account at [https://www.botanalytics.co](https://botanalytics.co) and get a Token.
 
 Botanalytics is available via.
 
@@ -372,4 +372,4 @@ trap("INT") {
 server.start
 
 ```
-Follow the instructions at [http://docs.botanalytics.apiary.io/](http://docs.botanalytics.apiary.io/)
+Follow the instructions at [https://botanalytics.co/docs](https://botanalytics.co/docs)
